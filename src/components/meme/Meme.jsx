@@ -9,6 +9,9 @@ export default function Meme() {
     randomImage: "http://i.imgflip.com/1bij.jpg",
   });
 
+  // destructing meme object
+  const { topText, bottomText, randomImage } = meme;
+
   // fetching data from the api: https://api.imgflip.com/get_memes
   useEffect(() => {
     fetch("https://api.imgflip.com/get_memes")
@@ -27,7 +30,16 @@ export default function Meme() {
     }));
   };
 
-  console.log(meme);
+  // form handler
+  function handleChange(event) {
+    const { name, value } = event.target;
+    setMeme((prevMeme) => ({
+      ...prevMeme,
+      [name]: value,
+    }));
+  }
+
+  // console.log(meme);
 
   return (
     <main className="main">
@@ -37,21 +49,25 @@ export default function Meme() {
           placeholder="Top text"
           name="topText"
           className="form--input"
+          value={meme.topText}
+          onChange={handleChange}
         />
         <input
           type="text"
           placeholder="Bottom text"
           name="bottomText"
           className="form--input"
+          value={meme.bottomText}
+          onChange={handleChange}
         />
         <button className="form--button" onClick={handleDisplay}>
-          Get a new meme image 🖼
+          Generate a new meme image 🖼
         </button>
       </div>
       <div className="meme">
-        <img src={meme.randomImage} className="meme--image" />
-        <h2></h2>
-        <h2></h2>
+        <img src={randomImage} className="meme--image" />
+        <h2 className="meme--text top">{topText}</h2>
+        <h2 className="meme--text bottom">{bottomText}</h2>
       </div>
     </main>
   );
