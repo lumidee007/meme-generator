@@ -1,8 +1,13 @@
-import { useState, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import "./meme.style.css";
 
 export default function Meme() {
   const [getMemes, setgetMemes] = useState([]);
+  const [meme, setMeme] = React.useState({
+    topText: "",
+    bottomText: "",
+    randomImage: "http://i.imgflip.com/1bij.jpg",
+  });
 
   // fetching data from the api: https://api.imgflip.com/get_memes
   useEffect(() => {
@@ -12,6 +17,17 @@ export default function Meme() {
   }, []);
 
   // console.log(getMemes);
+
+  const handleDisplay = () => {
+    const randomNumber = Math.floor(Math.random() * getMemes.length);
+    const url = getMemes[randomNumber].url;
+    setMeme((prevMeme) => ({
+      ...prevMeme,
+      randomImage: url,
+    }));
+  };
+
+  console.log(meme);
 
   return (
     <main className="main">
@@ -28,10 +44,12 @@ export default function Meme() {
           name="bottomText"
           className="form--input"
         />
-        <button className="form--button">Get a new meme image 🖼</button>
+        <button className="form--button" onClick={handleDisplay}>
+          Get a new meme image 🖼
+        </button>
       </div>
       <div className="meme">
-        <img src="../../../public/img/troll-face.png" className="meme--image" />
+        <img src={meme.randomImage} className="meme--image" />
         <h2></h2>
         <h2></h2>
       </div>
